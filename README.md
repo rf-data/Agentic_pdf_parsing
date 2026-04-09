@@ -2,7 +2,10 @@
 This project implements an agent-based system for structured analysis of scientific documents (PDFs).
 It combines LLM-based extraction, deterministic aggregation, and rule-based decision-making to derive insights across multiple documents.
 
-In scope of this project, three publically available research papers were used ([beyond_DA_hypothesis](https://pubmed.ncbi.nlm.nih.gov/29954475/), [new_atypical_antipsychotics](https://pubmed.ncbi.nlm.nih.gov/36142523/), [presynaptic_5-HT-receptors](https://pubmed.ncbi.nlm.nih.gov/36230998/)).
+In scope of this project, three publically available research papers were used:   
+- [Beyond_DA_hypothesis...](https://pubmed.ncbi.nlm.nih.gov/29954475/),   
+- [New_atypical_antipsychotics...](https://pubmed.ncbi.nlm.nih.gov/36142523/),
+- [Presynaptic_5-HT-receptors...](https://pubmed.ncbi.nlm.nih.gov/36230998/)
 
 ## 🚀 Core Idea
 Instead of querying documents individually, the system:   
@@ -71,10 +74,9 @@ This system is intentionally simple in some areas:
 __*👉 Meaning:*__
 Output quality depends heavily on extraction consistency
 
-### 🧩 Tech Stack
-Python
-OpenAI API
-Pydantic
-JSON-based caching
-(optional) Streamlit / MLflow
+### 🧩 Tech Stack   
+- Python   
+- OpenAI API   
+- Pydantic   
+- JSON-based caching / reports
 

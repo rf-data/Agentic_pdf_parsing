@@ -1,0 +1,45 @@
+{
+  "common_entities": [
+    "schizophrenia"
+  ],
+  "common_findings": [],
+  "common_mechanisms": [],
+  "conflicting_findings": [
+    "Psychosis involves dysregulation of multiple neurotransmitters.",
+    "Dopamine is not the only neurotransmitter linked to psychosis.",
+    "Pimavanserin is a new treatment for Parkinson's disease psychosis with serotonin 2A antagonist properties.",
+    "New atypical antipsychotics are effective against negative and cognitive symptoms of schizophrenia and affective symptoms of depression.",
+    "The review provides an overview of the neurobiological underpinnings of schizophrenia and depression.",
+    "5-HT2A and mGlu2/3 receptors co-localize but do not physically associate.",
+    "Activation of mGlu2/3 receptors inhibits glutamate exocytosis.",
+    "Blockade of 5-HT2A receptors enhances the inhibitory effect of mGlu2/3 receptor agonists."
+  ],
+  "dominant_mechanisms": [
+    "Dopamine hyperactivity in the mesolimbic pathway",
+    "NMDA receptor hypofunction",
+    "5-HT2A receptor hyperfunction",
+    "Dopaminergic system dysregulation",
+    "Glutamatergic transmission disorder"
+  ],
+  "overall_quality": "high",
+  "summary": "\nThe documents at hand commonly cover schizophrenia. Across these documents, dominant \nmechanisms include Dopamine hyperactivity in the mesolimbic pathway, NMDA receptor hypofunction, 5-HT2A receptor hyperfunction. \nKey consensus: no clear consensus.\n",
+  "unique_entities": [
+    "asenapine",
+    "aripiprazole",
+    "lumateperone",
+    "pimavanserin",
+    "5-HT2A receptor",
+    "brexpiprazole",
+    "lurasidone",
+    "Parkinson's disease",
+    "depression",
+    "cariprazine",
+    "schizophrenia",
+    "mGlu2/3 receptor",
+    "NMDA receptor",
+    "prefrontal cortex",
+    "serotonin",
+    "glutamate",
+    "dopamine"
+  ]
+}

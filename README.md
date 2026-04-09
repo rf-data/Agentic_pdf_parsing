@@ -54,8 +54,7 @@ __*Key signals:*__
 __*👉 Important concept:*__
 Lack of consensus is treated as signal, not failure
 
-[architecture](data/worklfow.png)
-[Example report](data/)
+[Example report](/report/2026-03-31_13-58-36_response_aggregated.json)
 
 ## 🧠 Design Principles   
 - **Separation of concerns:** Extraction ≠ Aggregation ≠ Decision   

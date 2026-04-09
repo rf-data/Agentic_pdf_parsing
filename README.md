@@ -19,7 +19,7 @@ __👉 Result: A lightweight research support system__
 - Research summarization
 
 ## 🏗️ Architecture Overview
-![Overview workflow](worklfow.png)
+![Overview workflow](/workflow.png)
 
 ## ⚙️ Pipeline Components
 ### 1. Extraction Engine (LLM + Cache)

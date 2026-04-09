@@ -119,7 +119,6 @@ def run_agentic_text_parsing(config_name: str):
     """
     besseres Matching (Fuzzy / NLP)
     LLM-basierte Aggregation (richtig stark)
-    Report Builder (Portfolio-ready Output)
     """
  
     # draw conclusion make a decision = tool.make_decision(structured)

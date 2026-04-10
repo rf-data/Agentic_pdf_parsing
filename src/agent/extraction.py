@@ -38,8 +38,8 @@ class ExtractionEngine:
                         )
         
         info = {
-            "prompt": prompt,
-            "key": key
+            "prompt_extraction": prompt,
+            "key_extraction": key
             }
         
         cached = llm._load_from_cache(key)
@@ -63,12 +63,12 @@ class ExtractionEngine:
             try:
                 data = json.loads(cleaned_output)
             except json.JSONDecodeError:
-                raise ValueError(f"Invalid JSON from LLM:\n{cleaned_output}")
+                raise ValueError(f"Invalid JSON from LLM extraction:\n{cleaned_output}")
 
         try:
             validated = ExtractedDocument(**data)
         except ValidationError as e:
-            raise ValueError(f"Schema validation failed:\n{e}")
+            raise ValueError(f"LLM extraction schema validation failed:\n{e}")
 
         llm._save_to_cache(key, data)
 

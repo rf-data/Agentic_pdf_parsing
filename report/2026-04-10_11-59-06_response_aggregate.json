@@ -1,0 +1,40 @@
+{
+  "category": "research_paper",
+  "confidence": 0.9,
+  "key_entities": [
+    "5-HT 2A receptor",
+    "m Glu2/3 receptor",
+    "glutamate exocytosis",
+    "prefrontal cortex",
+    "schizophrenia"
+  ],
+  "key_findings": [
+    "5-HT 2A and m Glu2/3 receptors co-localize but do not physically associate.",
+    "Activation of both receptors nullifies their inhibitory activities on glutamate exocytosis.",
+    "5-HT receptor antagonists amplify the effects of m Glu2/3 receptor agonists."
+  ],
+  "main_topics": [
+    "Receptor crosstalk",
+    "Glutamate neurotransmission",
+    "Neuropsychiatric disorders"
+  ],
+  "mechanisms": [
+    "Meta modulation of synaptic transmission",
+    "Inhibition of glutamate exocytosis by m Glu2/3 receptors",
+    "Functional interaction between 5-HT 2A and m Glu2/3 receptors"
+  ],
+  "methods": [
+    "Isolation of synaptosomes from rat prefrontal cortex",
+    "Measurement of [3H]D-aspartate release",
+    "Pharmacological manipulation using receptor agonists and antagonists"
+  ],
+  "missing_fields": [],
+  "outcomes": [
+    "Understanding of receptor interactions in glutamate regulation",
+    "Potential therapeutic implications for schizophrenia"
+  ],
+  "quality_assessment": "high",
+  "review_flags": [],
+  "summary": "This study investigates the interaction between presynaptic 5-HT 2A and m Glu2/3 receptors in the prefrontal cortex and their role in modulating glutamate exocytosis, with implications for neuropsychiatric disorders such as schizophrenia.",
+  "title": "Pre synaptic 5-HT 2A -m Glu2/3 Receptor – Receptor Cross talk in the Pre frontal Cortex: Meta modulation of Glutamate Exocytosis"
+}

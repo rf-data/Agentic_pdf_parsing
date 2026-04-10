@@ -7,14 +7,17 @@ from datetime import datetime
 
 from src.agent.extraction import ExtractionEngine
 from src.agent.aggregation import AggregationEngine
+from src.agent.aggregation_llm import LLMAggregationEngine
 from src.agent.decision import DecisionEngine
 from src.core.session import session
 from src.core.logger import create_logger
-from src.schema.extraction_schema import ExtractedDocument
+# from src.schema.extraction_schema import ExtractedDocument
 import src.tools.text_extraction as extract
+
 import src.utils.general_helper as gh
+import src.utils.llm_helper as llm
 import src.utils.file_helper as fh
-from src.utils.file_helper import get_yaml_config
+# import get_yaml_config
 
 
 # ------------------
@@ -26,9 +29,7 @@ from src.utils.file_helper import get_yaml_config
               help='The config_file to use.')
 def agentic_text_parsing(config_name):  
     
-    run_agentic_text_parsing(config_name)
-
-    return
+    return run_agentic_text_parsing(config_name)
 
 def run_agentic_text_parsing(config_name: str):
     # load env variables and config
@@ -36,7 +37,7 @@ def run_agentic_text_parsing(config_name: str):
     data_raw = os.getenv("DATA_RAW")
     data_processed = os.getenv("DATA_PROCESSED")
     
-    config = get_yaml_config(config_name)
+    config = fh.get_yaml_config(config_name)
     general_config = config.get("general_args", {})
     file_name = general_config["file_name"]
     log_name = general_config["name_log"]
@@ -49,8 +50,8 @@ def run_agentic_text_parsing(config_name: str):
     session.logger = logger
 
     # extract text from pdf + cleaning
-    # now = "2026-03-31_13-58-36" 
-    now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    now = "2026-04-10_11-59-06" 
+    # now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     session.now = now
 
     if isinstance(file_name, str):
@@ -78,53 +79,68 @@ def run_agentic_text_parsing(config_name: str):
     # extract + classify content 
     engine = ExtractionEngine(llm_config)
 
+    docs = []
     for name, text in texts.items():   
         logger.info("Start extracting info from text:\t%s",
                     name) 
         
-        result, info = engine.extract_info_with_retry(text)
+        result, info_extract = engine.extract_info_with_retry(text)
 
         result_dict = result.model_dump()
-        result_path = f"{data_processed}/{now}_{name}_llm_response.json"
-        fh.save_dict(result_dict, result_path)
+
+        extract_res_path = f"{data_processed}/{now}_{name}_response_extract.json"
+        fh.save_dict(result_dict, extract_res_path)
+        
+        docs.append(result)
 
         logger.info("Result %s:\n%s",
                     name,
                     result_dict)
 
-        settings.update(info)
-        settings_path = f"{data_processed}/{now}_{name}_llm_settings.json"
-        fh.save_dict(settings, settings_path)
+        settings[f"extract_info_{name}"] = info_extract
+        
+    # pre-aggregate results from extracted text
+    pre_aggregator = AggregationEngine()
 
-    # aggregate results from extracted text
-    aggregator = AggregationEngine()
+    # docs = []
+    # for f in file_name:
+    #     f_short = f.split(".")[0]
+    #     f_path = f"{data_processed}/{now}_{f_short}_llm_response.json"
 
-    docs = []
-    for f in file_name:
-        f_short = f.split(".")[0]
-        f_path = f"{data_processed}/{now}_{f_short}_llm_response.json"
+    #     resp_dict = fh.load_dict(f_path)
+    #     docs.append(ExtractedDocument(**resp_dict))
 
-        resp_dict = fh.load_dict(f_path)
-        docs.append(ExtractedDocument(**resp_dict))
+    pre_agg_result = pre_aggregator.aggregate(docs)
+    pre_agg_dict = pre_agg_result.model_dump()
 
-    agg_result = aggregator.aggregate(docs)
-    agg_dict = agg_result.model_dump()
-    # logger.info("Aggregated reponse:\n%s",
-    #             agg_dict)
-    gh.pretty_logging(agg_dict)
+    gh.pretty_logging(pre_agg_dict)
 
-    agg_path = f"{data_processed}/{now}_response_aggregated.json"
-    fh.save_dict(agg_dict, agg_path)
-    
+    # agg_path = f"{data_processed}/{now}_response_pre_aggregated.json"
+    # fh.save_dict(agg_dict, agg_path)
     """
     besseres Matching (Fuzzy / NLP)
-    LLM-basierte Aggregation (richtig stark)
     """
  
+    # prepare + process LLM input
+    llm_input = llm.build_llm_aggregation_input(docs, pre_agg_result)    
+    
+    llm_aggregation = LLMAggregationEngine(llm_config)
+    llm_agg_result, info_agg = llm_aggregation.aggregate_with_retry(llm_input)
+    
+    gh.pretty_logging(llm_agg_result.model_dump())
+
+    agg_res_path = f"{data_processed}/{now}_response_aggregate.json"
+    fh.save_dict(result_dict, agg_res_path)
+
+    settings["aggregation_info"] = info_agg
+
+    settings_path = f"{data_processed}/{now}_settings_llm.json"
+    fh.save_dict(settings, settings_path)
+
     # draw conclusion make a decision = tool.make_decision(structured)
-    decision_engine = DecisionEngine()
-    decision = decision_engine.decide(agg_result, n_docs=len(docs))
-    print(decision.model_dump())
+    # decision_engine = DecisionEngine()
+    # decision = decision_engine.decide(llm_agg_result, n_docs=len(docs))
+    # print(decision.model_dump())
 
     """
     👉 Report Builder (Markdown + PDF + Streamlit)

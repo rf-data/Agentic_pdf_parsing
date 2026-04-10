@@ -67,6 +67,34 @@ def _clean_llm_output(text: str) -> str:
     return text.strip()
 
 
+def build_llm_aggregation_input(docs, agg):
+    payload = []
+
+    for i, doc in enumerate(docs, start=1):
+        payload.append({
+            "document_id": i,
+            "title": doc.title,
+            "category": doc.category,
+            "summary": doc.summary,
+            "key_entities": doc.key_entities,
+            "key_findings": doc.key_findings,
+            "methods": doc.methods,
+            "main_topics": getattr(doc, "main_topics", []),
+            "mechanisms": getattr(doc, "mechanisms", []),
+            "outcomes": getattr(doc, "outcomes", []),
+            "missing_fields": getattr(doc, "missing_fields", []),
+            "review_flags": getattr(doc, "review_flags", []),
+            "quality_assessment": getattr(doc, "quality_assessment", None),
+            "confidence": doc.confidence
+        })
+
+    response = {
+        "documents": payload,
+        "pre_aggregation": agg.model_dump()
+        }
+    
+    return json.dumps(response, indent=2, ensure_ascii=False)
+
 # def cached_single(texts: str) -> dict:
 #     key = make_cache_key(texts, 
 #                         prompt, 

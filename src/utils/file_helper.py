@@ -31,15 +31,15 @@ def load_yaml_config(path):
 
 def get_yaml_config(name):
     # (1) load config + logger
-    gh.load_env_vars()
-    logger = session.logger
+    # gh.load_env_vars()
+    # logger = session.logger
 
     config_folder = os.getenv("CONFIG_PATH")
     
     config_path = Path(config_folder) / f"{name}.yaml"
 
-    logger.info("Loading config_file: %s", 
-                ph.shorten_path(config_path))
+    print(f"Loading config_file: {ph.shorten_path(config_path)}")
+    
     config = load_yaml_config(config_path)
 
     return config 

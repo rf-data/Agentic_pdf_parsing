@@ -29,6 +29,11 @@ def pretty_print(result):
 
         else:
             print(value)
+        
+        print()
+
+    return 
+
 
 def pretty_logging(result):
     logger = session.logger 
@@ -52,6 +57,10 @@ def pretty_logging(result):
         else:
             logger.info("value: %s", 
                         value)
+            
+        logger.info("")
+    
+    return 
 
 
 def snapshot_single_function(fn: Callable) -> dict:

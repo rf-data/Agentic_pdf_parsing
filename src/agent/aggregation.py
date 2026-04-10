@@ -7,9 +7,6 @@ from src.schema.extraction_schema import ExtractedDocument
 from src.schema.aggregation_schema import AggregatedResult
 from src.core.session import session
 
-
-
-
 # ------------------
 # MAIN FUNCTION
 # ------------------
@@ -19,7 +16,7 @@ class AggregationEngine:
     def aggregate(self, docs: List[ExtractedDocument]) -> AggregatedResult:
         logger = session.logger
 
-        logger.info("Start aggregating LLM responses.")
+        logger.info("Start pre-aggregating LLM responses.")
         # -------------------------
         # Aggregating 'Entities'
         # -------------------------
@@ -34,9 +31,13 @@ class AggregationEngine:
         # Aggregating 'Mechanisms'
         # -------------------------
         mech_counter = Counter()
+        all_mechs = []
 
         for d in docs:
+            all_mechs.extend(d.mechanisms)
             mech_counter.update(d.mechanisms)
+
+        unique_mechanisms = list(set(all_mechs))
 
         dominant_mechanisms = [m for m, _ in mech_counter.most_common(5)]
         common_mechanisms = [
@@ -49,6 +50,7 @@ class AggregationEngine:
         # -------------------------
         all_findings = [f for d in docs for f in d.key_findings]
 
+        unique_findings = list(set(all_findings))
         finding_counter = Counter(all_findings)
 
         common_findings = [
@@ -66,6 +68,7 @@ class AggregationEngine:
         # Aggregating 'Quality'
         # -------------------------
         qualities = [d.quality_assessment for d in docs if d.quality_assessment]
+        unique_qualities = list(set(qualities))
 
         if qualities:
             overall_quality = Counter(qualities).most_common(1)[0][0]

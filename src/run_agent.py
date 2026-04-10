@@ -130,7 +130,7 @@ def run_agentic_text_parsing(config_name: str):
     gh.pretty_logging(llm_agg_result.model_dump())
 
     agg_res_path = f"{data_processed}/{now}_response_aggregate.json"
-    fh.save_dict(result_dict, agg_res_path)
+    fh.save_dict(llm_agg_result.model_dump(), agg_res_path)
 
     settings["aggregation_info"] = info_agg
 

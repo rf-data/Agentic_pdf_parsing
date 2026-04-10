@@ -34,14 +34,29 @@ __*👉 Important behavior:*__
 - LLM is only called once per unique input   
 - Subsequent runs load from cache
 
-### 2. Aggregation Engine
+[Example extraction response](/report/2026-04-10_11-59-06_presynaptic_5-HT_receptors_response_extract.json)
+
+### 2_A. Deterministic Pre-Aggregation Engine
 Identifies:   
 - common entities   
 - dominant mechanisms   
 - consensus vs conflicting findings   
 - Uses deterministic logic (set operations + frequency analysis)
 
-__*👉 Goal: pattern detection across documents*__
+__*👉 Goal: pattern detection across documents + secondary signal for aggregation by LLM*__
+
+### 2_B LLM Aggregation Engine
+Evaluates the info extracted from the provided files and looks for semantical similarities between the files' info.
+Takes into account the pre-aggregrated info from the deterministic engine when evaluating and/or drawing conclusions from:   
+- documents' main topic
+- consenus points
+- conflicting points   
+- dominant mechanisms   
+- subgroup suggestions
+- evidence gaps   
+- overall interpretation
+
+[Example aggregation response](/report/2026-03-31_13-58-36_response_aggregated.json)
 
 ### 3. Decision Engine
 Translates aggregated signals into:   
@@ -57,7 +72,7 @@ __*Key signals:*__
 __*👉 Important concept:*__
 Lack of consensus is treated as signal, not failure
 
-[Example report](/report/2026-03-31_13-58-36_response_aggregated.json)
+[Example report (from v0.1)](/report/2026-03-31_13-58-36_response_aggregated.json)
 
 ## 🧠 Design Principles   
 - **Separation of concerns:** Extraction ≠ Aggregation ≠ Decision   

@@ -56,7 +56,7 @@ Takes into account the pre-aggregrated info from the deterministic engine when e
 - evidence gaps   
 - overall interpretation
 
-[Example aggregation response](/report/2026-03-31_13-58-36_response_aggregated.json)
+[Example aggregation response](/report/2026-04-10_11-59-06_presynaptic_5-HT_receptors_response_extract.json)
 
 ### 3. Decision Engine
 Translates aggregated signals into:   

@@ -1,4 +1,4 @@
-## aggregation.py
+## decision_determ.py
 # imports
 from typing import List
 from collections import Counter

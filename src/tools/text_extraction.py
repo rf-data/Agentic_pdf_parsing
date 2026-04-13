@@ -58,9 +58,25 @@ def extract_text_per_page(f_path:str, save=False) -> List:
             text_clean = cleaner.clean(text)
 
             text_split = cleaner.split(text_clean)
-            text_blocks = split_sections(text_split)
 
-            pages.append(text_blocks)
+            text_dict = {
+                    "document_name": f_name,
+                    "page":i
+                    }
+            
+            text_blocks = split_sections(text_split)
+            if len(text_blocks) > 1:
+                for k, chunk in enumerate(text_blocks):
+                    text_dict.update({
+                                "chunk_id": f"page_{i}_chunk_{k}",
+                                "text": chunk
+                                })
+            elif len(text_blocks) == 1:
+                text_dict["text"] = chunk
+            else: 
+                raise ValueError("'text_blocks' is empty.")
+
+            pages.append(text_dict)
 
     info = {
         "white_list": WHITELIST

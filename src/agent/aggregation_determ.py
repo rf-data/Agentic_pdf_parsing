@@ -1,4 +1,4 @@
-## aggregation.py
+## aggregation_determ.py
 # imports
 from collections import Counter
 from typing import List

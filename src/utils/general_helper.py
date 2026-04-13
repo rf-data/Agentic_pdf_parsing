@@ -5,7 +5,8 @@ import subprocess
 # import numpy as np
 import os
 from typing import Callable, Iterable
-from src.schema.aggregation_schema import AggregatedResult
+from src.schema.aggregation_schema import (AggregatedResult, 
+                                           LLMAggregatedResult)
 import inspect
 import hashlib
 
@@ -38,10 +39,13 @@ def pretty_print(result):
 def pretty_logging(result):
     logger = session.logger 
 
-    if isinstance(result, AggregatedResult):
+    if isinstance(result, (AggregatedResult, 
+                           LLMAggregatedResult)):
         data = result.model_dump()
     elif isinstance(result, dict):  
         data = result
+    else:
+        raise ValueError("Unknown dtype of 'result':", type(result))
 
     for key, value in data.items():
 

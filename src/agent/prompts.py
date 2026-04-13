@@ -82,3 +82,56 @@ Structured document data:
 {TEXT}
 \"\"\"
 """
+
+
+DECISION_PROMPT = """
+You are a scientific decision-support system.
+
+Based on aggregated multi-document analysis, generate:
+- key conclusions
+- risks
+- recommendations
+- research priorities
+
+Be concise and actionable.
+
+Schema:
+{
+  "key_conclusions": ["string", ...],
+  "main_risks": ["string", ...],
+  "recommendations": ["string", ...],
+  "research_priority": ["string", ...],
+  "confidence": float,
+  "reasoning": "string"
+}
+
+Rules:
+- ALL list fields MUST be arrays of strings
+- Even if only one item → return a list with one string
+- Output must be a valid JSON only
+- Prioritize the most important insights
+- Treat lack of consensus as a meaningful signal
+- Highlight evidence gaps as research opportunities
+- Do not repeat aggregation text
+
+Aggregation (JSON):
+'''
+{TEXT}
+'''
+"""
+
+QA_PROMPT = """
+You are answering a scientific question based on provided documents.
+
+Answer the question AND reference the documents you used.
+
+For each reference include:
+- document_id
+- short justification
+
+Question:
+{QUESTION}
+
+Documents:
+{DOCS}
+"""

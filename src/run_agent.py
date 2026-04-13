@@ -2,13 +2,17 @@
 # import
 import click
 import os
+from pathlib import Path
 from datetime import datetime
 
 
 from src.agent.extraction import ExtractionEngine
-from src.agent.aggregation import AggregationEngine
+from src.agent.aggregation_determ import AggregationEngine
 from src.agent.aggregation_llm import LLMAggregationEngine
-from src.agent.decision import DecisionEngine
+# from src.agent.decision_determ import DecisionEngine
+from src.agent.decision_llm import LLMDecisionEngine
+from src.agent.report_llm import ReportBuilder
+
 from src.core.session import session
 from src.core.logger import create_logger
 # from src.schema.extraction_schema import ExtractedDocument
@@ -25,7 +29,8 @@ import src.utils.file_helper as fh
 # ------------------
 
 @click.command()
-@click.option("--config_name", prompt="Name of 'config_file' (no suffix)",
+@click.option("--config_name", 
+              prompt="Name of 'config_file' (no suffix)",
               help='The config_file to use.')
 def agentic_text_parsing(config_name):  
     
@@ -36,6 +41,7 @@ def run_agentic_text_parsing(config_name: str):
     gh.load_env_vars()
     data_raw = os.getenv("DATA_RAW")
     data_processed = os.getenv("DATA_PROCESSED")
+    report_folder = os.getenv("FOLDER_REPORT")
     
     config = fh.get_yaml_config(config_name)
     general_config = config.get("general_args", {})
@@ -73,9 +79,6 @@ def run_agentic_text_parsing(config_name: str):
         settings.update(info)
         texts[name_short] = str(cleaned_text)
     
-    # print(type(text_complete))
-    # print(text_complete[:100])
-    
     # extract + classify content 
     engine = ExtractionEngine(llm_config)
 
@@ -101,57 +104,51 @@ def run_agentic_text_parsing(config_name: str):
         
     # pre-aggregate results from extracted text
     pre_aggregator = AggregationEngine()
-
-    # docs = []
-    # for f in file_name:
-    #     f_short = f.split(".")[0]
-    #     f_path = f"{data_processed}/{now}_{f_short}_llm_response.json"
-
-    #     resp_dict = fh.load_dict(f_path)
-    #     docs.append(ExtractedDocument(**resp_dict))
-
     pre_agg_result = pre_aggregator.aggregate(docs)
     pre_agg_dict = pre_agg_result.model_dump()
 
     gh.pretty_logging(pre_agg_dict)
-
     # agg_path = f"{data_processed}/{now}_response_pre_aggregated.json"
     # fh.save_dict(agg_dict, agg_path)
-    """
-    besseres Matching (Fuzzy / NLP)
-    """
- 
+  
     # prepare + process LLM input
     llm_input = llm.build_llm_aggregation_input(docs, pre_agg_result)    
     
     llm_aggregation = LLMAggregationEngine(llm_config)
-    llm_agg_result, info_agg = llm_aggregation.aggregate_with_retry(llm_input)
-    
-    gh.pretty_logging(llm_agg_result.model_dump())
-
-    agg_res_path = f"{data_processed}/{now}_response_aggregate.json"
-    fh.save_dict(llm_agg_result.model_dump(), agg_res_path)
-
+    agg_result, info_agg = llm_aggregation.aggregate_with_retry(llm_input)
     settings["aggregation_info"] = info_agg
 
-    settings_path = f"{data_processed}/{now}_settings_llm.json"
+    agg_result_dict = agg_result.model_dump()
+    gh.pretty_logging(agg_result_dict)
+
+    agg_res_path = Path(f"{data_processed}/{now}_response_aggregate.json")
+    fh.save_dict(agg_result_dict, agg_res_path)
+
+    # dict_path = f"{data_processed}/{now}_response_aggregate.json"
+    # agg_result_dict = fh.load_dict(dict_path)
+    # draw conclusion make a decision = tool.make_decision(structured)
+    decision_engine = LLMDecisionEngine(llm_config)
+
+    decision, info_decide = decision_engine.decide(agg_result)
+    decision_dict = decision.model_dump()
+    gh.pretty_logging(decision_dict) 
+
+    settings["aggregation_info"] = info_decide
+    settings_path = Path(f"{data_processed}/{now}_settings_llm_v2.json")
     fh.save_dict(settings, settings_path)
 
-    # draw conclusion make a decision = tool.make_decision(structured)
-    # decision_engine = DecisionEngine()
-    # decision = decision_engine.decide(llm_agg_result, n_docs=len(docs))
-    # print(decision.model_dump())
+    rep_builder = ReportBuilder(agg_result, decision)
+    md_report = rep_builder.build_md_report()
 
-    """
-    👉 Report Builder (Markdown + PDF + Streamlit)
-    👉 oder LLM Decision Layer (deutlich stärker, 
-    aber auch komplexer)
-    """
+    report_name = f"{now}_report_llm"
+    fh.save_md_file(md_report, report_name, report_folder)
     # return {
     #     "category": category,
     #     "data": structured,
     #     "decision": decision
     # }
+
+
 
 if __name__ == "__main__":
     agentic_text_parsing()

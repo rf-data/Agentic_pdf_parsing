@@ -4,9 +4,10 @@
 general_args:
   name_log: agentic_parsing
   name_logfile: agentic_parsing
-  file_name: [beyond_DA_hypothesis.pdf,
-              new_atypical_antipsychotics.pdf,
-              presynaptic_5-HT_receptors.pdf]
+  folder_name: /home/robfra/0_Portfolio_Projekte/agentic_pdf_parsing/data/raw
+  # file_name: [beyond_DA_hypothesis.pdf,
+  #             new_atypical_antipsychotics.pdf,
+  #             presynaptic_5-HT_receptors.pdf]
 
 llm_settings:
   model: gpt-4o-mini

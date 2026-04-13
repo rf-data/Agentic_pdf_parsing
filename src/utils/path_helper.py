@@ -46,3 +46,16 @@ def create_save_path(name_suffix, file_suffix):     # folder_name,
     ensure_dir(f_path)
 
     return f_path
+
+def list_files(folder: str | Path, suffix: str):
+    folder = ensure_dir(folder)
+
+    if not folder.is_dir():
+        if folder.is_file() and folder.suffix == suffix:
+            return [folder]
+        else:
+            raise ValueError(f"Provided 'folder' argument is neither a folder not a file carrying the correct suffix:\n{folder} (dtype = {type(folder)})")
+
+    files = [f for f in folder.iterdir() if f.suffix == suffix]  
+            
+    return files

@@ -1,5 +1,6 @@
 # import yaml
 import json
+import re
 import os
 from pathlib import Path
 import inspect
@@ -48,6 +49,18 @@ def get_yaml_config(name):
 # ---------------------
 # DICT / JSON METHODS
 # ---------------------
+def safe_json_loads(text: str):
+    try: 
+        return json.loads(text) 
+    except json.JSONDecodeError:
+        
+        # try extracting text from JSON
+        match = re.search(r"\{.*\}", ext, re.DOTALL)
+        if match:
+            return json.loads(match.group())
+
+        raise ValueError("Invalid JSON:\n", text)
+
 
 def make_json_safe(obj):
     if isinstance(obj, dict):
@@ -121,7 +134,18 @@ def load_dict(path: Path | str) -> dict:
     return data
 
 
+def save_md_file(data, file_name, folder):
+    logger = session.logger
 
+    folder= ph.ensure_dir(folder)
+    f_path = Path(f"{folder}/{file_name}.md")
+    with open(f_path, "w", encoding="utf-8") as f:
+        f.write(data)
+
+    logger.info("File saved as %s",
+                ph.shorten_path(f_path))
+
+    return 
 
 # # -----------------
 # # MODEL METHODS

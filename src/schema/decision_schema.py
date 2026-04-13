@@ -14,3 +14,14 @@ class DecisionResult(BaseModel):
     recommendations: List[str]
 
     reasoning: str
+
+
+class LLMDecisionResult(BaseModel):
+    key_conclusions: List[str]
+    main_risks: List[str]
+    recommendations: List[str]
+
+    research_priority: List[str]
+
+    confidence: float
+    reasoning: str

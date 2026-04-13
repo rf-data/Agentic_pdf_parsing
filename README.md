@@ -82,7 +82,6 @@ Lack of consensus is treated as signal, not failure
 
 ## ⚠️ Limitations
 This system is intentionally simple in some areas:   
-- *Aggregation* is currently *string-based* (no semantic matching)   
 - No embedding similarity yet   
 - Decision layer is rule-based (not learned)
 

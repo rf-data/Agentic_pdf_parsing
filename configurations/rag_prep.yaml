@@ -1,0 +1,31 @@
+# ------------------------------
+# GENERAL
+# ------------------------------
+general_args:
+  name_log: rag (preparation) 
+  name_logfile: rag_preparation
+  # file_name: 2026-04-16_13-51-46_texts_raw.json
+  timestamp:  2026-04-19_12-04-32 # 2026-04-18_21-41-23
+  
+# preparation:
+#   noise_patterns: 
+#     - Figure \d+
+#     - Table \d+
+#     - Take-Home Points
+#     - BRAINSTORMS.*Update
+
+#   chunking: True
+#   spacy_language: en_core_web_sm
+#   max_tokens: 400
+#   overlap: 25
+
+# # llm_settings:
+# #   model: gpt-4o-mini
+# #   temperature: 0.0
+# #   namespace: pdf_parsing
+# #   max_retries: 2
+
+
+# ------------------
+# MAIN FUNCTION
+# ------------------

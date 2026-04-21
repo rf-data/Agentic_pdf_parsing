@@ -5,7 +5,7 @@ from typing import List
 
 from src.schema.extraction_schema import ExtractedDocument
 from src.schema.aggregation_schema import AggregatedResult
-from src.core.session import session
+from src.core.memory import Session
 
 # ------------------
 # MAIN FUNCTION
@@ -14,7 +14,7 @@ from src.core.session import session
 class AggregationEngine:
 
     def aggregate(self, docs: List[ExtractedDocument]) -> AggregatedResult:
-        logger = session.logger
+        logger = Session.logger
 
         logger.info("Start pre-aggregating LLM responses.")
         # -------------------------

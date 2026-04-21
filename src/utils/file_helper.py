@@ -19,7 +19,7 @@ import src.utils.general_helper as gh
 import src.utils.path_helper as ph
 
 # import src.core.logger as log
-from src.core.session import session
+from src.core.memory import Session
 
 
 # -----------------------
@@ -87,7 +87,7 @@ def make_json_safe(obj):
 
 
 def save_dict(data: dict, path: Path) -> None:
-    logger = session.logger
+    logger = Session.logger
 
     path= ph.ensure_dir(path)
     data_new = make_json_safe(data)
@@ -122,7 +122,7 @@ def append_json(data: dict, path: Path) -> None:
 
 
 def load_dict(path: Path | str) -> dict:
-    logger = session.logger
+    logger = Session.logger
 
     path= ph.ensure_dir(path)
 
@@ -135,7 +135,7 @@ def load_dict(path: Path | str) -> dict:
 
 
 def save_md_file(data, file_name, folder):
-    logger = session.logger
+    logger = Session.logger
 
     folder= ph.ensure_dir(folder)
     f_path = Path(f"{folder}/{file_name}.md")

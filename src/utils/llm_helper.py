@@ -7,7 +7,7 @@ from pathlib import Path
 import json
 
 import src.utils.path_helper as ph
-from src.core.session import session
+from src.core.memory import session
 
 def _make_cache_key(report_text: str, 
                    prompt: str, 

@@ -1,0 +1,45 @@
+# ------------------------------
+# GENERAL
+# ------------------------------
+general_args:
+  name_log: extract_clean_text
+  name_logfile: extract_clean_text
+  file_name:
+    - beyond_DA_hypothesis.pdf
+    - new_atypical_antipsychotics.pdf
+    - presynaptic_5-HT_receptors.pdf
+
+preprocessing: 
+  # whitelist: [dopamine, serotonin, schizophrenia, 
+  #             psychotic, symptom, drug, 
+  #             receptor, glutamate, agonist, 
+  #             antagonist, pathway, psychosis, 
+  #             hypothesis, hypotheses, neural, 
+  #             signaling, cortex, pharmacologic,
+  #             pharmacology]
+  noise_pattern: 
+    - 'doi:\s*10\.\s*\d+/\S+'
+    - 'doi:.*'
+    - '©.*'
+    - 'BRAINSTORMS-Clinical'
+    - 'https?://\S+'
+    - 'https?\s*:\s*/\s*/\S+'
+    - '\bPublished online\b.*'
+    - '\bCitation:\b.*'
+    - '\bCopyright:\b.*'
+    - 'Cambridge\bUniversity\bPress'
+    - '^\d+$'  # Seitenzahlen
+  
+  extraction_model: pymupdf
+  spacy_language: en_core_web_sm
+  model_name: gpt-4o-mini
+  y_tol: 5                        # 3-8
+  y_gap_tol: 15                   # 10-25
+  # max_tokens: 300
+  max_words: 80
+  overlap: 1
+  min_words_chunk: 40
+  
+# ------------------
+# MAIN FUNCTION
+# ------------------

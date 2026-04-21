@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=pdf file parsing App
+Exec=/home/robfra/start_project.sh
+Icon=/home/robfra/icon.png
+Type=Application
+Terminal=true

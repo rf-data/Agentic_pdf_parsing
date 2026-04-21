@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import List
 
-import src.tools.text_extraction as extract
+import src.tools.extraction as extract
 import src.utils.path_helper as ph
 import src.utils.llm_helper as llm
 

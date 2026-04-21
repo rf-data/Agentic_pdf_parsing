@@ -9,14 +9,14 @@ from src.schema.aggregation_schema import LLMAggregatedResult
 from src.agent.prompts import DECISION_PROMPT
 import src.utils.llm_helper as llm
 import src.utils.file_helper as fh
-from src.core.session import session
+from src.core.memory import Session
 
 
 #########
 # HELPER
 #########
 def normalize_decision_output(data: dict):
-    logger = session.logger
+    logger = Session.logger
     
     list_fields = [
         "key_conclusions",
@@ -46,7 +46,7 @@ class LLMDecisionEngine:
         self.max_retries = llm_config["max_retries"]
 
     def decide(self, agg_input: LLMAggregatedResult | dict):
-        logger = session.logger
+        logger = Session.logger
 
         if isinstance(agg_input, dict):
             agg_input_str = json.dumps(agg_input, indent=2)

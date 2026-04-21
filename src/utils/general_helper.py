@@ -4,13 +4,13 @@ import subprocess
 
 # import numpy as np
 import os
-from typing import Callable, Iterable
+from typing import Callable, Iterable, List
 from src.schema.aggregation_schema import (AggregatedResult, 
                                            LLMAggregatedResult)
 import inspect
 import hashlib
 
-from src.core.session import session
+from src.core.memory import session
 
 
 def pretty_print(result):
@@ -112,7 +112,7 @@ def iter_chunks(df, chunk_size=25):
         yield df.iloc[start : start + chunk_size]
 
 
-def load_env_vars(name=".env"):
+def load_env_vars(name: List | str=".env"):
     """
     Load environment variables from .env files if available.
     """
@@ -120,21 +120,23 @@ def load_env_vars(name=".env"):
     # if session_path and os.path.exists(session_path):
     #     load_dotenv(session_path, override=True)
     #     print("Variables from .env.session loaded")
+    
+    if isinstance(name, str):
+        name = [name]
 
-    if name == ".env":
-        env_path = find_dotenv()
+    env_loaded = session.state.env_loaded
+    name_clear = [n for n in name if n not in env_loaded]
+
+    for env in name_clear: 
+        env_path = find_dotenv(filename=env)
         if env_path:    #  and not session.env_loaded:
             load_dotenv(env_path)
-            print(f"Variables from {name} loaded")
-            # session.env_loaded = True
+            print(f"Variables loaded from '{env}'")
+            env_loaded.append(env)
 
-    else:
-        env_path = find_dotenv(file_name=name)
-        if env_path:    #  and not session.env_loaded:
-            load_dotenv(env_path)
-            print(f"Variables from {name} loaded")
+    session.state.env_loaded = env_loaded
 
-    # session.save_session()
+    return 
 
 
 def get_git_commit():
